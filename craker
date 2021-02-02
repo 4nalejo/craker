@@ -27,7 +27,7 @@ then
 echo -e "adb: --find \e[2mFind vulnerable ip\e[0m"
 echo -e "adb: --upload <paylaod> \e[2mUpload payload\e[0m"
 echo -e "adb: --shell \e[2mConnect to the victim's terminal\e[0m"
-echo -e "adb: --download <sdcard> <directory>\e[2mDownload sdcard\e[0m"
+echo -e "adb: --download <sdcard> <directory> \e[2mDownload sdcard\e[0m"
 echo -e "adb: --connect <ip> \e[2mConnect devices\e[0m"
 echo -e "adb: --disconnect \e[2mDisconnect devices\e[0m"
 echo -e "adb: --view \e[2mView connected devices\e[0m"
