@@ -1,4 +1,4 @@
-#Craker a remote hacking tool
+# Craker a remote hacking tool
 
 this is the craker manual
 
@@ -7,13 +7,14 @@ this is the craker manual
 
 
 
-#INSTALL CRAKER
-
+### Install craker
+```
 $ git clone https://github.com/4nalejo/craker
-
-#USE OF CRAKER
-$ ./craker 
-
-./craker --help
-
+$ cd craker
+$ chmod 755 craker
+```
+### Using:
+```
+$ ./craker --help
+```
 *"--help" tells us to put that argument to open the help menu*
